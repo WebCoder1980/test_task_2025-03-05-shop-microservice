@@ -3,14 +3,23 @@ CREATE TABLE IF NOT EXISTS store_employee (
 	lastname varchar(100) NOT NULL,
 	firstname varchar(100) NOT NULL,
 	patronymic varchar(100) NOT NULL,
-	birth_date timestamp NOT NULL,
-	position_id int8 NOT NULL,
+	birthDate timestamp NOT NULL,
+	positionId int8 NOT NULL,
+    shopId int8 NOT NULL,
 	gender bool NOT NULL,
-	CONSTRAINT store_employee_pkey PRIMARY KEY (id_)
+	CONSTRAINT store_employee_pkey PRIMARY KEY (id_),
+	CONSTRAINT fk_employee_position FOREIGN KEY (positionId) REFERENCES position_types(id_),
+    CONSTRAINT fk_employee_shop FOREIGN KEY (shopId) REFERENCES shop(id_)
 );
 
 CREATE TABLE IF NOT EXISTS counter (
 	"name" varchar(75) NOT NULL,
 	currentid int8 NULL,
 	CONSTRAINT counter_pkey PRIMARY KEY (name)
+);
+
+CREATE TABLE IF NOT EXISTS position_types (
+    id_ int8 NOT NULL,
+    name varchar(150) NOT NULL,
+    CONSTRAINT position_types_pkey PRIMARY KEY (id_)
 );

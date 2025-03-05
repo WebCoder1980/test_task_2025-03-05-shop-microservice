@@ -4,13 +4,7 @@ package ru.isands.test.estore.dao.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -55,12 +49,14 @@ public class Employee implements Serializable {
 	 */
 	@Column(name = "birthDate", nullable = false)
 	Date birthDate;
-	
-	/**
-	 * Ссылка на должность сотрудника
-	 */
-	@Column(name = "positionId", nullable = false)
-	Long positionId;
+
+	@ManyToOne
+	@JoinColumn(name = "positionId", nullable = false)
+	private PositionType position;
+
+	@ManyToOne
+	@JoinColumn(name = "shopId", nullable = false)
+	private Shop shop;
 	
 	/**
 	 * Пол сотрудника (true - мужской, false - женский)
