@@ -15,5 +15,5 @@ public class EmployeeDTO {
     private LocalDate birthDate;
     private Long positionId;
     private Long shopId;
-    private boolean gender;
+    private Boolean gender;
 }
