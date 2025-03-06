@@ -1,7 +1,9 @@
 package ru.isands.test.estore.rest;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.isands.test.estore.dto.EmployeeDTO;
 import ru.isands.test.estore.service.EmployeeService;
 
@@ -61,5 +63,23 @@ public class EmployeeController {
 	public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
 		employeeService.deleteEmployee(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping("/upload-csv")
+	@Operation(summary = "Загрузить сотрудников из CSV", responses = {
+			@ApiResponse(description = "Сотрудники успешно загружены")
+	})
+	public ResponseEntity<String> uploadCSV(@RequestParam("file") MultipartFile file) {
+		if (file.isEmpty() || !file.getOriginalFilename().endsWith(".csv")) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Пожалуйста, загрузите корректный CSV файл.");
+		}
+
+		try {
+			employeeService.processCSVFile(file);
+			return ResponseEntity.ok("Данные сотрудников успешно загружены.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ошибка при обработке файла.");
+		}
 	}
 }

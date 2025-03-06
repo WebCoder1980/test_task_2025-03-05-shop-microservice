@@ -2,7 +2,7 @@ package ru.isands.test.estore.dao.entity;
 
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.*;
 
@@ -47,15 +47,15 @@ public class Employee implements Serializable {
 	/**
 	 * Дата рождения сотрудника
 	 */
-	@Column(name = "birthDate", nullable = false)
-	Date birthDate;
+	@Column(name = "birthdate", nullable = false)
+	LocalDate birthDate;
 
 	@ManyToOne
-	@JoinColumn(name = "positionId", nullable = false)
+	@JoinColumn(name = "positionid", nullable = false)
 	private PositionType position;
 
 	@ManyToOne
-	@JoinColumn(name = "shopId", nullable = false)
+	@JoinColumn(name = "shopid", nullable = false)
 	private Shop shop;
 	
 	/**

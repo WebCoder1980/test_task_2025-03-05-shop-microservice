@@ -2,6 +2,7 @@ package ru.isands.test.estore.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import ru.isands.test.estore.dao.entity.Employee;
 import ru.isands.test.estore.dao.entity.PositionType;
@@ -9,6 +10,12 @@ import ru.isands.test.estore.dao.entity.Shop;
 import ru.isands.test.estore.dao.repo.EmployeeRepository;
 import ru.isands.test.estore.dto.EmployeeDTO;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,6 +82,47 @@ public class EmployeeService {
         Shop shop = new Shop();
         shop.setId(employeeDTO.getShopId());
         employee.setShop(shop);
+    }
+
+    public void processCSVFile(MultipartFile file) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), Charset.forName("Windows-1251")))) {
+            String line;
+            List<EmployeeDTO> employees = new ArrayList<>();
+
+            boolean isFirstLine = true;
+            while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+                String[] data = line.split(";");
+
+                EmployeeDTO employeeDTO = new EmployeeDTO();
+                employeeDTO.setLastName(data[1].trim());
+                employeeDTO.setFirstName(data[2].trim());
+                employeeDTO.setPatronymic(data[3].trim());
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                employeeDTO.setBirthDate(LocalDate.parse(data[4].trim(), formatter));
+
+                employeeDTO.setPositionId(Long.parseLong(data[5].trim()));
+                employeeDTO.setShopId(Long.parseLong(data[6].trim()));
+                employeeDTO.setGender(data[7].trim().equals("1"));
+
+                employees.add(employeeDTO);
+            }
+
+            saveAllEmployees(employees);
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при обработке файла", e);
+        }
+    }
+
+    public void saveAllEmployees(List<EmployeeDTO> employeeDTOs) {
+        List<Employee> employees = employeeDTOs.stream()
+                .map(this::mapToEntity)
+                .collect(Collectors.toList());
+        employeeRepository.saveAll(employees);
     }
 
     private EmployeeDTO mapToDTO(Employee employee) {

@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS store_employee (
 	lastname varchar(100) NOT NULL,
 	firstname varchar(100) NOT NULL,
 	patronymic varchar(100) NOT NULL,
-	birthDate timestamp NOT NULL,
+	birthDate date NOT NULL,
 	positionId int8 NOT NULL,
     shopId int8 NOT NULL,
 	gender bool NOT NULL,
