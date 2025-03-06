@@ -1,10 +1,13 @@
 package ru.isands.test.estore.rest;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.isands.test.estore.dto.EmployeeDTO;
+import ru.isands.test.estore.dto.ErrorDTO;
 import ru.isands.test.estore.service.EmployeeService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +29,8 @@ public class EmployeeController {
 
 	@PostMapping
 	@Operation(summary = "Добавить сотрудника", responses = {
-			@ApiResponse(description = "Сотрудник добавлен")
+			@ApiResponse(responseCode = "200", description = "Сотрудник добавлен"),
+			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
 	public ResponseEntity<EmployeeDTO> addEmployee(@RequestBody EmployeeDTO employeeDTO) {
 		return ResponseEntity.ok(employeeService.addEmployee(employeeDTO));
@@ -34,7 +38,8 @@ public class EmployeeController {
 
 	@GetMapping
 	@Operation(summary = "Получить всех сотрудников", responses = {
-			@ApiResponse(description = "Список сотрудников")
+			@ApiResponse(responseCode = "200", description = "Список сотрудников"),
+			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
 	public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
 		return ResponseEntity.ok(employeeService.getAllEmployees());
@@ -42,7 +47,9 @@ public class EmployeeController {
 
 	@GetMapping("/{id}")
 	@Operation(summary = "Получить сотрудника по ID", responses = {
-			@ApiResponse(description = "Информация о сотруднике")
+			@ApiResponse(responseCode = "200", description = "Информация о сотруднике"),
+			@ApiResponse(responseCode = "404", description = "Сотрудник не найден", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
 	})
 	public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
 		return ResponseEntity.ok(employeeService.getEmployeeById(id));
@@ -50,7 +57,9 @@ public class EmployeeController {
 
 	@PutMapping("/{id}")
 	@Operation(summary = "Обновить информацию о сотруднике", responses = {
-			@ApiResponse(description = "Сотрудник обновлен")
+			@ApiResponse(responseCode = "200", description = "Сотрудник обновлен"),
+			@ApiResponse(responseCode = "404", description = "Сотрудник не найден", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
 	public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
 		return ResponseEntity.ok(employeeService.updateEmployee(id, employeeDTO));
@@ -58,7 +67,9 @@ public class EmployeeController {
 
 	@DeleteMapping("/{id}")
 	@Operation(summary = "Удалить сотрудника", responses = {
-			@ApiResponse(description = "Сотрудник удален")
+			@ApiResponse(responseCode = "204", description = "Сотрудник удален"),
+			@ApiResponse(responseCode = "404", description = "Сотрудник не найден", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
 	public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
 		employeeService.deleteEmployee(id);
@@ -67,7 +78,9 @@ public class EmployeeController {
 
 	@PostMapping("/upload-csv")
 	@Operation(summary = "Загрузить сотрудников из CSV", responses = {
-			@ApiResponse(description = "Сотрудники успешно загружены")
+			@ApiResponse(responseCode = "200", description = "Сотрудники успешно загружены"),
+			@ApiResponse(responseCode = "404", description = "Сотрудник не найден", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
+			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
 	public ResponseEntity<String> uploadCSV(@RequestParam("file") MultipartFile file) {
 		if (file.isEmpty() || !file.getOriginalFilename().endsWith(".csv")) {
