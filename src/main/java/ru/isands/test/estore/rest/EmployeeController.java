@@ -33,8 +33,8 @@ public class EmployeeController {
 			@ApiResponse(responseCode = "200", description = "Сотрудник добавлен"),
 			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
-	public ResponseEntity<EmployeeDTO> addEmployee(@RequestBody EmployeeDTO employeeDTO) {
-		return ResponseEntity.ok(employeeService.addEmployee(employeeDTO));
+	public ResponseEntity<EmployeeDTO> add(@RequestBody EmployeeDTO employeeDTO) {
+		return ResponseEntity.ok(employeeService.add(employeeDTO));
 	}
 
 	@GetMapping
@@ -45,8 +45,8 @@ public class EmployeeController {
 			@ApiResponse(responseCode = "200", description = "Список сотрудников"),
 			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
-	public ResponseEntity<List<EmployeeDTO>> getAllEmployees(@RequestParam(value = "start", defaultValue = "0") int start, @RequestParam(value = "limit", defaultValue = "1000000") int limit) {
-		return ResponseEntity.ok(employeeService.getAllEmployees(start, limit));
+	public ResponseEntity<List<EmployeeDTO>> getAll(@RequestParam(value = "start", defaultValue = "0") int start, @RequestParam(value = "limit", defaultValue = "1000000") int limit) {
+		return ResponseEntity.ok(employeeService.getAll(start, limit));
 	}
 
 	@GetMapping("/{id}")
@@ -55,8 +55,8 @@ public class EmployeeController {
 			@ApiResponse(responseCode = "404", description = "Сотрудник не найден", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
 			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
 	})
-	public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
-		return ResponseEntity.ok(employeeService.getEmployeeById(id));
+	public ResponseEntity<EmployeeDTO> getById(@PathVariable Long id) {
+		return ResponseEntity.ok(employeeService.getById(id));
 	}
 
 	@PutMapping("/{id}")
@@ -65,8 +65,8 @@ public class EmployeeController {
 			@ApiResponse(responseCode = "404", description = "Сотрудник не найден", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
 			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
-	public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
-		return ResponseEntity.ok(employeeService.updateEmployee(id, employeeDTO));
+	public ResponseEntity<EmployeeDTO> update(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+		return ResponseEntity.ok(employeeService.update(id, employeeDTO));
 	}
 
 	@DeleteMapping("/{id}")
@@ -75,8 +75,8 @@ public class EmployeeController {
 			@ApiResponse(responseCode = "404", description = "Сотрудник не найден", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class))),
 			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
-	public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
-		employeeService.deleteEmployee(id);
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		employeeService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 

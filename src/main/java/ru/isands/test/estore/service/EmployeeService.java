@@ -29,13 +29,13 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public EmployeeDTO addEmployee(EmployeeDTO employeeDTO) {
+    public EmployeeDTO add(EmployeeDTO employeeDTO) {
         Employee employee = mapToEntity(employeeDTO);
         Employee savedEmployee = employeeRepository.save(employee);
         return mapToDTO(savedEmployee);
     }
 
-    public List<EmployeeDTO> getAllEmployees(int start, int limit) {
+    public List<EmployeeDTO> getAll(int start, int limit) {
         return employeeRepository.findAll().stream()
                 .sorted(Comparator.comparing(Employee::getId))
                 .skip(start)
@@ -44,13 +44,13 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    public EmployeeDTO getEmployeeById(Long id) {
+    public EmployeeDTO getById(Long id) {
         return employeeRepository.findById(id)
                 .map(this::mapToDTO)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Сотрудник не найден"));
     }
 
-    public EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO) {
+    public EmployeeDTO update(Long id, EmployeeDTO employeeDTO) {
         Employee existingEmployee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Сотрудник не найден"));
 
@@ -59,7 +59,7 @@ public class EmployeeService {
         return mapToDTO(updatedEmployee);
     }
 
-    public void deleteEmployee(Long id) {
+    public void delete(Long id) {
         if (!employeeRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Сотрудник не найден");
         }
