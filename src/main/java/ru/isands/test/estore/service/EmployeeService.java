@@ -75,7 +75,7 @@ public class EmployeeService {
         employee.setLastName(employeeDTO.getLastName());
         employee.setPatronymic(employeeDTO.getPatronymic());
         employee.setBirthDate(employeeDTO.getBirthDate());
-        employee.setGender(employeeDTO.isGender());
+        employee.setGender(employeeDTO.getGender());
 
         PositionType position = new PositionType();
         position.setId(employeeDTO.getPositionId());
