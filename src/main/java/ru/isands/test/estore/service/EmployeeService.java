@@ -35,9 +35,11 @@ public class EmployeeService {
         return mapToDTO(savedEmployee);
     }
 
-    public List<EmployeeDTO> getAllEmployees() {
+    public List<EmployeeDTO> getAllEmployees(int start, int limit) {
         return employeeRepository.findAll().stream()
                 .sorted(Comparator.comparing(Employee::getId))
+                .skip(start)
+                .limit(limit)
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }

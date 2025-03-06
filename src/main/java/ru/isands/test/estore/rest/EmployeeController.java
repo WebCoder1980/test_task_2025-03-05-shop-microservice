@@ -1,5 +1,6 @@
 package ru.isands.test.estore.rest;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
@@ -37,12 +38,15 @@ public class EmployeeController {
 	}
 
 	@GetMapping
-	@Operation(summary = "Получить всех сотрудников", responses = {
+	@Operation(summary = "Получить всех сотрудников", parameters = {
+			@Parameter(name = "start", description = "Номер первого в результате сотрудника", schema = @Schema(type = "integer", defaultValue = "0")),
+			@Parameter(name = "limit", description = "Максимальное колличество сотрудников в результате", schema = @Schema(type = "integer", defaultValue = "1000000"))
+			}, responses = {
 			@ApiResponse(responseCode = "200", description = "Список сотрудников"),
 			@ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
 	})
-	public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
-		return ResponseEntity.ok(employeeService.getAllEmployees());
+	public ResponseEntity<List<EmployeeDTO>> getAllEmployees(@RequestParam(value = "start", defaultValue = "0") int start, @RequestParam(value = "limit", defaultValue = "1000000") int limit) {
+		return ResponseEntity.ok(employeeService.getAllEmployees(start, limit));
 	}
 
 	@GetMapping("/{id}")
