@@ -21,7 +21,6 @@ import java.util.List;
 @Tag(name = "Shop", description = "Сервис для выполнения операций над магазинами")
 @RequestMapping("/estore/api/shop")
 public class ShopController {
-
 	private final ShopService shopService;
 
 	public ShopController(ShopService shopService) {
