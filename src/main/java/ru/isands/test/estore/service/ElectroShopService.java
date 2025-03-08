@@ -11,6 +11,7 @@ import ru.isands.test.estore.dto.ElectroShopDTO;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -87,7 +88,12 @@ public class ElectroShopService {
                     isFirstLine = false;
                     continue;
                 }
+
                 String[] data = line.split(";");
+
+                if (data.length < 3) {
+                    throw new RuntimeException("Файл содержит меньше столбцов, чем нужно");
+                }
 
                 ElectroShopDTO electroShopDTO = new ElectroShopDTO();
                 electroShopDTO.setElectroId(Long.parseLong(data[0].trim()));
