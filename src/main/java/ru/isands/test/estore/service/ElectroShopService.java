@@ -96,8 +96,8 @@ public class ElectroShopService {
                 }
 
                 ElectroShopDTO electroShopDTO = new ElectroShopDTO();
-                electroShopDTO.setElectroId(Long.parseLong(data[0].trim()));
-                electroShopDTO.setShopId(Long.parseLong(data[1].trim()));
+                electroShopDTO.setShopId(Long.parseLong(data[0].trim()));
+                electroShopDTO.setElectroId(Long.parseLong(data[1].trim()));
                 electroShopDTO.setQuantity(Integer.parseInt(data[2].trim()));
 
                 electroShops.add(electroShopDTO);
