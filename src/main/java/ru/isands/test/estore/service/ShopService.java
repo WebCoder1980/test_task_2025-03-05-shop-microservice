@@ -103,7 +103,7 @@ public class ShopService {
         List<Shop> shops = shopDTOs.stream()
                 .map(this::mapToEntity)
                 .collect(Collectors.toList());
-        shopRepository.saveAll(shops);
+        shops.forEach(i -> shopRepository.save(i));
     }
 
     private ShopDTO mapToDTO(Shop shop) {

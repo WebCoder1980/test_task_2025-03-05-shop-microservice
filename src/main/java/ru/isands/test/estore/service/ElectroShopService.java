@@ -107,7 +107,7 @@ public class ElectroShopService {
         List<ElectroShop> electroShops = electroShopDTOs.stream()
                 .map(this::mapToEntity)
                 .collect(Collectors.toList());
-        electroShopRepository.saveAll(electroShops);
+        electroShops.forEach(i -> electroShopRepository.save(i));
     }
 
     private ElectroShopDTO mapToDTO(ElectroShop electroShop) {
