@@ -38,13 +38,14 @@ public class ElectroShopController {
     @GetMapping
     @Operation(summary = "Получить все магазин-товар", parameters = {
             @Parameter(name = "start", description = "Номер первого в результате магазин-товар", schema = @Schema(type = "integer", defaultValue = "0")),
-            @Parameter(name = "limit", description = "Максимальное колличество магазин-товар в результате", schema = @Schema(type = "integer", defaultValue = "1000000"))
+            @Parameter(name = "limit", description = "Максимальное колличество магазин-товар в результате", schema = @Schema(type = "integer", defaultValue = "1000000")),
+            @Parameter(name = "shopid", description = "ID магазина", schema = @Schema(type = "long", requiredMode = Schema.RequiredMode.NOT_REQUIRED))
     }, responses = {
             @ApiResponse(responseCode = "200", description = "Список магазин-товар"),
             @ApiResponse(responseCode = "500", description = "Ошибка сервера", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDTO.class)))
     })
-    public ResponseEntity<List<ElectroShopDTO>> getAll(@RequestParam(value = "start", defaultValue = "0") int start, @RequestParam(value = "limit", defaultValue = "1000000") int limit) {
-        return ResponseEntity.ok(electroShopService.getAll(start, limit));
+    public ResponseEntity<List<ElectroShopDTO>> getAll(@RequestParam(value = "start", defaultValue = "0") Integer start, @RequestParam(value = "limit", defaultValue = "1000000") Integer limit, @RequestParam(value = "shopid", required = false) Long shopId) {
+        return ResponseEntity.ok(electroShopService.getAll(start, limit, shopId));
     }
 
     @GetMapping("/id")

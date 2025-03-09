@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ElectroShopService {
@@ -33,12 +34,21 @@ public class ElectroShopService {
         return mapToDTO(savedElectroShop);
     }
 
-    public List<ElectroShopDTO> getAll(int start, int limit) {
-        return electroShopRepository.findAll().stream()
-                .sorted(Comparator.comparing(ElectroShop::getShopId).thenComparing(ElectroShop::getElectroId))
+    public List<ElectroShopDTO> getAll(Integer start, Integer limit, Long shopId) {
+        Stream<ElectroShop> electroShopStream =
+                electroShopRepository.findAll().stream()
+                .sorted(Comparator.comparing(ElectroShop::getShopId).thenComparing(ElectroShop::getElectroId));
+
+        if (shopId != null) {
+            electroShopStream =
+                    electroShopStream.filter(i -> i.getShopId() == shopId);
+        }
+
+        electroShopStream = electroShopStream
                 .skip(start)
-                .limit(limit)
-                .map(this::mapToDTO)
+                .limit(limit);
+
+        return electroShopStream.map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
